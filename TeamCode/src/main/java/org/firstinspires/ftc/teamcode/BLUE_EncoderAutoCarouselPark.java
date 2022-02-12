@@ -52,10 +52,10 @@ public class BLUE_EncoderAutoCarouselPark extends LinearOpMode {
     }
 
     public void shutOffRTP() {
-        robot.stdLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.stdLeftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.stdRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.stdRightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        robot.stdRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        robot.stdRightRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     public void turnRight() {
@@ -87,11 +87,11 @@ public class BLUE_EncoderAutoCarouselPark extends LinearOpMode {
         if (opModeIsActive()) {
             finalAmount = robot.stdArmMotor.getCurrentPosition() + amount;
             robot.stdArmMotor.setTargetPosition(finalAmount);
-            robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             runtime.reset();
             robot.stdArmMotor.setPower(power);
             robot.stdArmMotor.setPower(0);
-            robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
     }
 

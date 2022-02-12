@@ -37,7 +37,7 @@ public class RED_AutoCarouselStorageUnit extends AutonomousBot
         
         moveBackward(1.2, .3);
         
-        spinCarousel(DcMotor.Direction.REVERSE, robot.OPTIMAL_CAROUSEL_POWER, 5000);
+        spinCarousel(DcMotorEx.Direction.REVERSE, robot.OPTIMAL_CAROUSEL_POWER, 5000);
         
         leftStrafe(1.2);
     }

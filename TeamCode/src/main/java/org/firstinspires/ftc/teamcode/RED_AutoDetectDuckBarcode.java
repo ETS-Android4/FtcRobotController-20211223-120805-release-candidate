@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
@@ -111,7 +112,7 @@ public class RED_AutoDetectDuckBarcode extends AutonomousBot {
             // backup toward the carousel
             moveBackward(.39, 0.3);
 
-            spinCarousel(DcMotor.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
+            spinCarousel(DcMotorEx.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
 
             moveForward(1);
             leftStrafe(.2);

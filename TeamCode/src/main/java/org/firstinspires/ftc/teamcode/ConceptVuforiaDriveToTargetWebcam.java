@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.util.Range;
 
@@ -71,11 +71,11 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
     OpenGLMatrix targetPose     = null;
     String targetName           = "";
 
-    private DcMotor leftFront   = null;
-    private DcMotor leftRear  = null;
+    private DcMotorEx leftFront   = null;
+    private DcMotorEx leftRear  = null;
 
-    private DcMotor rightFront   = null;
-    private DcMotor rightRear  = null;
+    private DcMotorEx rightFront   = null;
+    private DcMotorEx rightRear  = null;
 
     @Override public void runOpMode()
     {
@@ -117,10 +117,10 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        leftRear.setDirection(DcMotorEx.Direction.REVERSE);
+        rightFront.setDirection(DcMotorEx.Direction.FORWARD);
+        rightRear.setDirection(DcMotorEx.Direction.FORWARD);
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
 

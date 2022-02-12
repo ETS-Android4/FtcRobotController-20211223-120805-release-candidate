@@ -149,13 +149,13 @@ public class StandardBot {
     }
 
     public void setMotorsToBrakeOnZeroPower() {
-        stdLeftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stdLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stdRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stdRightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        stdLeftRear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        stdLeftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        stdRightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        stdRightRear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        stdCarouselMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stdArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        stdCarouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        stdArmMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     public void setAllMotorsToZeroPower() {
@@ -169,10 +169,10 @@ public class StandardBot {
     }
 
     public void setModeAllRTP() {
-        stdLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        stdLeftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        stdRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        stdLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        stdLeftRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        stdRightFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
     }
 
     /* Initialize standard Hardware interfaces */

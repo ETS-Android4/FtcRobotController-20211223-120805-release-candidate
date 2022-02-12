@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="RED_AutoDriveToWarehouse")
+@Autonomous(name="RED_AutoDriveToWarehouse1_5LeftStrafe1_0")
 
-public class RED_AutoDriveToWarehouse extends AutonomousBot
+public class RED_AutoDriveToWarehouse1_5LeftStrafe1_0 extends AutonomousBot
 {
 
     @Override
@@ -24,9 +24,8 @@ public class RED_AutoDriveToWarehouse extends AutonomousBot
 
 
 
-        moveForward(2.0);
-
-
+        moveForward(1.5);
+        leftStrafe(1.0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "BLUE_AutoCarouselStorageUnit")
@@ -30,7 +30,7 @@ public class BLUE_AutoCarouselStorageUnit extends AutonomousBot {
 
         moveBackward(1.0, .3);
 
-        spinCarousel(DcMotor.Direction.FORWARD, StandardBot.OPTIMAL_CAROUSEL_POWER, 5000);
+        spinCarousel(DcMotorEx.Direction.FORWARD, StandardBot.OPTIMAL_CAROUSEL_POWER, 5000);
 
         rightStrafe(1.2);
 

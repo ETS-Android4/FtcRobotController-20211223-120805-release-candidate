@@ -201,7 +201,7 @@ public class DuoTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             } else if (gamepad2.left_stick_y < 0) // going UPWARD
             {
@@ -213,7 +213,7 @@ public class DuoTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL4);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             } else if (gamepad2.y)  // Raise ARM to LEVEL 3
             {
@@ -227,7 +227,7 @@ public class DuoTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL3);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             } else if (gamepad2.b) // Raise ARM to LEVEL 2
             {
@@ -239,7 +239,7 @@ public class DuoTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL2);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             }
             // Raise ARM to LEVEL 1
@@ -253,7 +253,7 @@ public class DuoTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL1);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
 
             }
@@ -261,7 +261,7 @@ public class DuoTeleOpMain extends LinearOpMode {
             else if (gamepad2.x)// && turretServo.getPosition() == robot.TURRET_MIDDLE_POSITION) 
             {
                 armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
             }
 
@@ -274,11 +274,11 @@ public class DuoTeleOpMain extends LinearOpMode {
             // Controls the CAROUSEL SPINNER
             if (gamepad1.right_trigger > 0)  // Spin COUNTER-CLOCKWISE
             {
-                carouselMotor.setDirection(DcMotor.Direction.REVERSE);
+                carouselMotor.setDirection(DcMotorEx.Direction.REVERSE);
                 carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
             } else if (gamepad1.left_trigger > 0) // Spin CLOCKWISE
             {
-                carouselMotor.setDirection(DcMotor.Direction.FORWARD);
+                carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
                 carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
             } else
                 carouselMotor.setPower(0.0);
@@ -311,7 +311,7 @@ public class DuoTeleOpMain extends LinearOpMode {
             // Left trigger extends the ExtenderServo
             else if (gamepad2.right_stick_y > 0) {
                 //armMotor.setTargetPosition(robot.ARM_LEVEL4);
-                //armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 //armMotor.setPower(robot.OPTIMAL_ARM_POWER);
 
                 double extenderServoPosition = extenderServo.getPosition() - StandardBot.EXTENDER_INCREMENT;
@@ -326,14 +326,17 @@ public class DuoTeleOpMain extends LinearOpMode {
             telemetry.addData("ExtenderServo Position", "%5.2f", extenderServo.getPosition());
 
             // Controls the MagneticServo
-            if (gamepad2.right_stick_x > 0)
+//            if (gamepad2.right_stick_x > 0)
 //                && armMotor.getTargetPosition() >= robot.ARM_LEVEL3
 //                && extenderServo.getPosition() <= robot.EXTENDER_MIN_POSITION)
+            if (gamepad2.start)
             {
                 magneticServo.setPower(StandardBot.OPTIMAL_INTAKE_POWER);
-            } else if (gamepad2.right_stick_x < 0)
+            }
+//            else if (gamepad2.right_stick_x < 0)
 //                && armMotor.getTargetPosition() >= robot.ARM_LEVEL3
 //              && extenderServo.getPosition() <= robot.EXTENDER_MIN_POSITION)
+            else if (gamepad2.back)
             {
                 magneticServo.setPower(-StandardBot.OPTIMAL_INTAKE_POWER);
             } else {
