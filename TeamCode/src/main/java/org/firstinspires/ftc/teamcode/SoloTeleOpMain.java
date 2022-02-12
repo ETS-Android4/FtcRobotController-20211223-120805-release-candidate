@@ -79,10 +79,10 @@ public class SoloTeleOpMain extends LinearOpMode {
 
         armMotor.setTargetPositionTolerance(StandardBot.ARM_POSITION_TOLERANCE);
         armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
 
-        extenderServo.setPosition(StandardBot.EXTENDER_MIN_POSITION);
+        extenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("ArmMotor Encoder", "Starting at %7d",
@@ -134,7 +134,7 @@ public class SoloTeleOpMain extends LinearOpMode {
             telemetry.addData("Motors", "leftFront (%.2f), rightFront (%.2f)", leftFrontPower, rightFrontPower);
             telemetry.addData("Motors", "leftRear (%.2f), rightRear (%.2f)", leftRearPower, rightRearPower);
 
-/*** NO TURRET TURNING DURING TeleOp (single) mode
+/*  NO CONTROL OF TURRET DURING SOLO TELEOP MODE
             // Controls the TURRET
 
             double turretServoPosition = 0.0;
@@ -183,9 +183,9 @@ public class SoloTeleOpMain extends LinearOpMode {
                     turretServo.setPosition(StandardBot.TURRET_RIGHT_POSITION);
                 }
             }
-
+************/
             telemetry.addData("Motors", "Turret Position %5.2f", turretServo.getPosition());
-*/
+
             int newArmMotorTarget;
 
             // Controls the ARM
@@ -201,7 +201,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             } else if (gamepad1.right_stick_y < 0) // going UPWARD
             {
@@ -213,7 +213,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL4);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             }
             else if (gamepad1.y)  // Raise ARM to LEVEL 3
@@ -228,7 +228,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL3);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             }
             else if (gamepad1.b) // Raise ARM to LEVEL 2
@@ -241,7 +241,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL2);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
             }
             // Raise ARM to LEVEL 1
@@ -255,7 +255,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                     armMotor.setTargetPosition(StandardBot.ARM_LEVEL1);
                 }
 
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
 
             }
@@ -263,7 +263,7 @@ public class SoloTeleOpMain extends LinearOpMode {
             else if (gamepad1.x)// && turretServo.getPosition() == robot.TURRET_MIDDLE_POSITION)
             {
                 armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
             }
 
@@ -276,11 +276,11 @@ public class SoloTeleOpMain extends LinearOpMode {
             // Controls the CAROUSEL SPINNER
             if (gamepad1.right_trigger > 0)  // Spin COUNTER-CLOCKWISE
             {
-                carouselMotor.setDirection(DcMotor.Direction.REVERSE);
+                carouselMotor.setDirection(DcMotorEx.Direction.REVERSE);
                 carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
             } else if (gamepad1.left_trigger > 0) // Spin CLOCKWISE
             {
-                carouselMotor.setDirection(DcMotor.Direction.FORWARD);
+                carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
                 carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
             } else
                 carouselMotor.setPower(0.0);
@@ -313,7 +313,7 @@ public class SoloTeleOpMain extends LinearOpMode {
             // extends the ExtenderServo
             else if (gamepad1.dpad_up) {
                 //armMotor.setTargetPosition(robot.ARM_LEVEL4);
-                //armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 //armMotor.setPower(robot.OPTIMAL_ARM_POWER);
 
                 double extenderServoPosition = extenderServo.getPosition() - StandardBot.EXTENDER_INCREMENT;
@@ -328,21 +328,25 @@ public class SoloTeleOpMain extends LinearOpMode {
             telemetry.addData("ExtenderServo Position", "%5.2f", extenderServo.getPosition());
 
             // Controls the MagneticServo
-            if (gamepad1.dpad_left)
+//            if (gamepad2.right_stick_x > 0)
 //                && armMotor.getTargetPosition() >= robot.ARM_LEVEL3
 //                && extenderServo.getPosition() <= robot.EXTENDER_MIN_POSITION)
+            if (gamepad1.start)
             {
                 magneticServo.setPower(StandardBot.OPTIMAL_INTAKE_POWER);
-            } else if (gamepad1.dpad_right)
+            }
+//            else if (gamepad2.right_stick_x < 0)
 //                && armMotor.getTargetPosition() >= robot.ARM_LEVEL3
 //              && extenderServo.getPosition() <= robot.EXTENDER_MIN_POSITION)
+            else if (gamepad1.back)
             {
                 magneticServo.setPower(-StandardBot.OPTIMAL_INTAKE_POWER);
             } else {
                 magneticServo.setPower(0.0);
             }
 
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+            telemetry.addData("Status", "Run Time: " + runtime);
             telemetry.update();
         }
     }
