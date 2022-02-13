@@ -47,14 +47,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public class StandardBot {
     static final double COUNTS_PER_MOTOR_REV = 537.7; // 5203-2402-0019 goBilda Motor Encoder
-    static final double PPR_ARM_MOTOR = 3895.9; // 5202 Series Yellow Jacket Planetary Gear Motor (139:1 Ratio, 43 RPM, 3.3 - 5V Encoder)
+    //static final double PPR_ARM_MOTOR = 3895.9; // 5202 Series Yellow Jacket Planetary Gear Motor (139:1 Ratio, 43 RPM, 3.3 - 5V Encoder)
 
     static final double WHEEL_DIAMETER_INCHES = 4.00; // 5202-0002-0139 goBilda Motor Encoder...Diameter of wheel in inches
 
-    static final double DRIVE_GEAR_RATIO = 1.0;     // This is < 1.0 if geared UP
+    static final double DRIVE_TRAIN_GEAR_RATIO = 1.0;     // This is < 1.0 if geared UP
     static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_INCHES * Math.PI;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_RATIO) /
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_TRAIN_GEAR_RATIO) /
             WHEEL_CIRCUMFERENCE;
+
+    static final double WORM_GEAR_RATIO = 28.0;
+    static final double ARM_WORM_COUNTS_PER_REV = COUNTS_PER_MOTOR_REV * WORM_GEAR_RATIO;
 
     static final double TURRET_LEFT_POSITION = 0.17;
     static final double TURRET_MIDDLE_POSITION = 0.49;
@@ -62,17 +65,17 @@ public class StandardBot {
     static final double TURRET_INCREMENT = 0.01;
 
     // ARM LEVEL 4 is for capping the Team Shipping Element
-    static final int ARM_LEVEL4 = (int) Math.round(0.40 * PPR_ARM_MOTOR);
+    static final int ARM_LEVEL4 = (int) Math.round(0.40 * ARM_WORM_COUNTS_PER_REV);
 
-    static final int ARM_LEVEL3 = 796; // (int)Math.round(0.23 * PPR_ARM_MOTOR);
+    static final int ARM_LEVEL3 = (int)Math.round(0.23 * ARM_WORM_COUNTS_PER_REV);
 
-    // level 3 = 1013
-    static final int ARM_LEVEL2 = 579; //(int)Math.round(0.160 * PPR_ARM_MOTOR);
-    // level 2 = 586
-    static final int ARM_LEVEL1 = 288; //(int)Math.round(0.090 * PPR_ARM_MOTOR);
-    // level 1 = 351
+    // level 3 = 796
+    static final int ARM_LEVEL2 = (int)Math.round(0.160 * ARM_WORM_COUNTS_PER_REV);
+    // level 2 = 579
+    static final int ARM_LEVEL1 = (int)Math.round(0.090 * ARM_WORM_COUNTS_PER_REV);
+    // level 1 = 288
     static final int ARM_LEVEL_REST = 0;
-    static final int ARM_INCREMENT = (int) Math.round(0.005 * PPR_ARM_MOTOR);
+    static final int ARM_INCREMENT = (int) Math.round(0.005 * ARM_WORM_COUNTS_PER_REV);
     static final int ARM_POSITION_TOLERANCE = 5; // tolerate errors to within n ticks
 
     static final double EXTENDER_MIN_POSITION = 0.00;
@@ -88,7 +91,7 @@ public class StandardBot {
 
     static final double OPTIMAL_ARM_POWER = 1.0;
     static final double OPTIMAL_INTAKE_POWER = 0.7;
-    static final double OPTIMAL_REST_POWER = 0.5;
+    static final double OPTIMAL_REST_POWER = 0.0;
     static final double OPTIMAL_CAROUSEL_POWER = 0.40;
 
     static final double TILE_SIZE = 24.0;

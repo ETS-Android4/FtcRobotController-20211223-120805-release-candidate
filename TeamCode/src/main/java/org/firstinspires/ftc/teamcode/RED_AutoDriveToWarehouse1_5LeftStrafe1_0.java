@@ -24,7 +24,7 @@ public class RED_AutoDriveToWarehouse1_5LeftStrafe1_0 extends AutonomousBot
 
 
 
-        moveForward(1.5);
+        moveForward(0.6,0.3);
         leftStrafe(1.0);
 
         telemetry.addData("Path", "Complete");

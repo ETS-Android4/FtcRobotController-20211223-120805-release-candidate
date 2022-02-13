@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
 
+    private final int DEBUG_SLEEP_TIME = 5000;
     @Override
     public void runOpMode() {
 
@@ -18,6 +19,7 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
         initVuforia();
         initTfod();
         robot.stdTurretServo.setPosition(StandardBot.TURRET_MIDDLE_POSITION);
+        robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
 
         /*
          * Activate TensorFlow Object Detection before we wait for the start command.
@@ -54,43 +56,68 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
             telemetry.addData("Moving", "rightStrafe 1.1 tiles");
             rightStrafe(1.1);
 
-            if (teamElementBarcodeLevel == 1) {
-                liftArm(StandardBot.ARM_LEVEL1);
-                telemetry.addData("ARM", "lifting to level 1");
-            } else if (teamElementBarcodeLevel == 2) {
-                liftArm(StandardBot.ARM_LEVEL2);
-                telemetry.addData("ARM", "lifting to level 2");
-            } else {
-                liftArm(StandardBot.ARM_LEVEL3);
-                telemetry.addData("ARM", "lifting to level 3");
+            try {
+                if (teamElementBarcodeLevel == 1) {
+                    telemetry.addData("ARM", "lifting to level 1");
+                    liftArm(StandardBot.ARM_LEVEL1);
+                } else if (teamElementBarcodeLevel == 2) {
+                    telemetry.addData("ARM", "lifting to level 2");
+                    liftArm(StandardBot.ARM_LEVEL2);
+                } else {
+                    telemetry.addData("ARM", "lifting to level 3");
+                    liftArm(StandardBot.ARM_LEVEL3);
+                }
+
+
+                telemetry.addData("Arm", "at position %5d", robot.stdArmMotor.getCurrentPosition());
+                telemetry.update();
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Moving", "forward 0.6 tile");
+                moveForward(0.6);
+                telemetry.update();
+
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Status", "regurgitating game element");
+                regurgitateGameElement(0.3, 3000);
+                telemetry.update();
+
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Status", "leftStrafe 2.35 tiles");
+                // strafe left toward the storage unit wall
+                leftStrafe(2.35);
+                telemetry.update();
+
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Status", "return arm to rest position");
+                returnArmPosition();
+
+                telemetry.update();
+
+                sleep(DEBUG_SLEEP_TIME);
+                // backup toward the carousel
+
+                telemetry.addData("Status", "moveBackward .39 tile");
+                moveBackward(.39, 0.3);
+
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Status", "spin carousel in reverse");
+                spinCarousel(DcMotorEx.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
+
+                telemetry.addData("Status", "moveForward 1 tile");
+                moveForward(1);
+                leftStrafe(.2);
+
+                telemetry.update();
+
+            } catch (Exception e) {
+                telemetry.addData("Error Caught", e.toString());
+                telemetry.update();
             }
-
-            telemetry.addData("Arm", "at position %5d", robot.stdArmMotor.getCurrentPosition());
-
-            telemetry.addData("Moving", "forward 0.6 tile");
-            moveForward(0.6, .5);
-
-            telemetry.addData("Status", "regurgitating game element");
-            regurgitateGameElement(0.3, 3000);
-
-            telemetry.addData("Status", "Sleeping for 1000 milliseconds");
-            sleep(1000);
-
-            telemetry.addData("Status", "Sleeping for 500 milliseconds");
-            sleep(500);
-            // strafe left toward the storage unit wall
-            leftStrafe(2.35);
-
-            telemetry.addData("Status", "return arm to rest position");
-            returnArmPosition();
-
-            // backup toward the carousel
-            moveBackward(.39, 0.3);
-
-            spinCarousel(DcMotorEx.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
-
-            moveForward(1);
-            leftStrafe(.2);
         }
 
     }

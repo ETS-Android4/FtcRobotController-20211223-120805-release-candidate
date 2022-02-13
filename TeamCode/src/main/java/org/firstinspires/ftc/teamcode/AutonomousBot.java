@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -89,7 +90,7 @@ public class AutonomousBot extends LinearOpMode {
         robot.stdRightFront.setDirection(DcMotorEx.Direction.REVERSE);
         robot.stdRightRear.setDirection(DcMotorEx.Direction.REVERSE);
 
-        robot.stdArmMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        //robot.stdArmMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
     }
 
@@ -132,15 +133,25 @@ public class AutonomousBot extends LinearOpMode {
     }
 
     public void liftArm(int position) {
-        setDefaultMotorDirections();
-        robot.resetMotorEncoders();
-        robot.setMotorsToRunUsingEncoder();
 
+        robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
+        telemetry.addData("DEBUG", "Inside liftArm(int position) now");
+        robot.stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("DEBUG", "Stop and Reset Encoder");
+        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("DEBUG", "Run Using Encoder");
+
+        //int newArmPos = robot.stdArmMotor.getCurrentPosition() + position;
         robot.stdArmMotor.setTargetPosition(position);
+
+        telemetry.addData("DEBUG", "Set Target Position to %5d", position);
         robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+        telemetry.addData("DEBUG", "Run to Position");
         robot.stdArmMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
-        /*
-        while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > robot.ARM_POSITION_TOLERANCE)
+        telemetry.addData("DEBUG", "Set Power to %7.2f", StandardBot.OPTIMAL_ARM_POWER );
+
+
+        while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > StandardBot.ARM_POSITION_TOLERANCE)
         {
           
           telemetry.addData("Motors", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
@@ -149,14 +160,38 @@ public class AutonomousBot extends LinearOpMode {
           telemetry.update();
         
         }
-        */
+        telemetry.addData("DEBUG", "calling robot.setMotorsToBreakOnZeroPower()");
+        robot.setMotorsToBrakeOnZeroPower();
+
+        telemetry.addData("DEBUG", "robot.stdArmMotor.setPower(0.0)");
+        robot.stdArmMotor.setPower(0.0);
+
+        telemetry.addData("DEBUG", "Set Mode Run Using Encoder");
+        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("DEBUG", "Set Stop and Reset Encoder");
+        robot.stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        telemetry.update();
+
     }
 
     public void returnArmPosition() {
-        robot.stdArmMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        robot.stdArmMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
 
+        telemetry.addData("DEBUG", "Inside returnArmPosition() now");
+        robot.stdArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("DEBUG", "Stop and Reset Encoder");
+        robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("DEBUG", "Run Using Encoder");
+        robot.stdArmMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
+        telemetry.addData("DEBUG", "Set Target Position to %5d", StandardBot.ARM_LEVEL_REST);
+        robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+        telemetry.addData("DEBUG", "Run to Position");
+        robot.stdArmMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
+        telemetry.addData("DEBUG", "Set Power to %7.2f", StandardBot.OPTIMAL_REST_POWER);
+        robot.stdArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("DEBUG", "Stop and Reset Encoder");
+        telemetry.update();
+        sleep(5000);
     }
 
     public void leftStrafe(double nAmounts) {
@@ -183,7 +218,7 @@ public class AutonomousBot extends LinearOpMode {
         int newLeftTarget;
         int newRightTarget;
 
-        setDefaultMotorDirections();
+        //setDefaultMotorDirections();
         robot.resetMotorEncoders();
         robot.setMotorsToRunUsingEncoder();
 
@@ -331,10 +366,10 @@ public class AutonomousBot extends LinearOpMode {
 
         int preloadTargetLevel = 0;
 
-        /**
+        /*
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
+         */
         if (tfod != null) {
             tfod.activate();
 
