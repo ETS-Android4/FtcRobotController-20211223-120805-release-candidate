@@ -94,14 +94,31 @@ public class StandardBot {
     static final double OPTIMAL_REST_POWER = 0.0;
     static final double OPTIMAL_CAROUSEL_POWER = 0.40;
 
+
+
     static final double TILE_SIZE = 24.0;
     private final ElapsedTime period = new ElapsedTime();
-    public DcMotorImplEx stdRightFront = null;
-    public DcMotorImplEx stdRightRear = null;
-    public DcMotorImplEx stdLeftFront = null;
-    public DcMotorImplEx stdLeftRear = null;
-    public DcMotorImplEx stdCarouselMotor = null;
-    public DcMotorImplEx stdArmMotor = null;
+
+    public DcMotorImplEx stdRightFront = null; // max velocity = 2840 ticks
+    public static final int RIGHT_FRONT_MAX_VELOCITY = 2840;
+
+    public DcMotorImplEx stdRightRear = null;  // max velocity = 2840 ticks
+    public static final int RIGHT_REAR_MAX_VELOCITY = 2840;
+
+    public DcMotorImplEx stdLeftFront = null; // max velocity = 2880 ticks
+    public static final int LEFT_FRONT_MAX_VELOCITY = 2880;
+
+    public DcMotorImplEx stdLeftRear = null;  // max velocity = 2840 ticks
+    public static final int LEFT_REAR_MAX_VELOCITY = 2840;
+
+    static final int MAX_DRIVE_TRAIN_VELOCITY = 2840; // min value of all 4 wheels above for drive speed consistency
+
+    public DcMotorImplEx stdCarouselMotor = null;  // max velocity = 2920 ticks
+    public static final int CAROUSEL_MAX_VELOCITY = 2920;
+
+    public DcMotorImplEx stdArmMotor = null; // max velocity = 3020 ticks
+    public static final int ARM_MAX_VELOCITY = 3020;
+
     public Servo stdTurretServo = null;
     public Servo stdExtenderServo = null;
     public CRServo stdMagneticServo = null;
@@ -116,6 +133,10 @@ public class StandardBot {
     }
 
     public void setDefaultMotorDirections() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
+
         stdLeftFront.setDirection(DcMotorEx.Direction.REVERSE);
         stdLeftRear.setDirection(DcMotorEx.Direction.REVERSE);
         stdRightFront.setDirection(DcMotorEx.Direction.FORWARD);
@@ -125,6 +146,10 @@ public class StandardBot {
     }
 
     public void setMotorsToRunWithoutEncoder() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
+
         stdLeftFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -134,6 +159,10 @@ public class StandardBot {
     }
 
     public void resetMotorEncoders() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
+
         stdLeftFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         stdLeftRear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         stdRightFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -144,6 +173,9 @@ public class StandardBot {
     }
 
     public void setMotorsToRunUsingEncoder() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
         stdLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -152,6 +184,9 @@ public class StandardBot {
     }
 
     public void setMotorsToBrakeOnZeroPower() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
         stdLeftRear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         stdLeftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         stdRightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -162,6 +197,9 @@ public class StandardBot {
     }
 
     public void setAllMotorsToZeroPower() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
         // Set all motors to zero power
         stdLeftFront.setPower(0);
         stdLeftRear.setPower(0);
@@ -172,10 +210,89 @@ public class StandardBot {
     }
 
     public void setModeAllRTP() {
+        if (hwMap == null) { // escape this function if the robot has not mapped to any motors
+            return;
+        }
         stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    }
+
+    public void setCustomPIDFCoefficients(){
+        // Instructions from FIRST GLOBAL Motor PIDF Tuning Guide (Updated 3 September 2019)
+
+        // Set Custom Velocity PIDF Coefficients
+
+        // stdRightFront's max velocity = 2840 ticks
+        // stdRightRear's max velocity = 2840 ticks
+        // stdLeftFront's max velocity = 2880 ticks
+        // stdLeftRear's max velocity = 2840 ticks
+
+        // the min velocity of the 4 motors above is the max velocity of the drive train
+        // driveTrain's max velocity = 2840 ticks
+
+        // F (driveTrain) = 32767 / 2840 ticks
+        double F = 11.5376760563;
+
+        // P = 0.1 x F
+        double P = 0.1 * F;
+
+        // I = 0.1 x P
+        double I = 0.1 * P;
+
+        // D = 0
+        double D = 0.0;
+
+        stdRightFront.setVelocityPIDFCoefficients(P, I, D, F);
+        stdRightRear.setVelocityPIDFCoefficients(P, I, D, F);
+        stdLeftFront.setVelocityPIDFCoefficients(P, I, D, F);
+        stdLeftRear.setVelocityPIDFCoefficients(P, I, D, F);
+
+        // stdCarouselMotor's max velocity = 2920 ticks
+        // F (carousel) = 32767 / 2920 ticks
+        F = 11.2215753425;
+
+        // P = 0.1 x F
+        P = 0.1 * F;
+
+        // I = 0.1 x P
+        I = 0.1 * P;
+
+        // D = 0
+        D = 0.0;
+
+        stdCarouselMotor.setVelocityPIDFCoefficients(P, I, D, F);
+
+        // stdArmMotor's max velocity = 3020 ticks
+        // F (arm) = 32767 / 3020 ticks
+        F = 10.85;
+
+        // P = 0.1 x F
+        P = 0.1 * F;
+
+        // I = 0.1 x P
+        I = 0.1 * P;
+
+        // D = 0
+        D = 0.0;
+
+        stdArmMotor.setVelocityPIDFCoefficients(P, I, D, F);
+
+        // Set Custom Position PIDF Coefficients
+        // Regardless of your maximum velocity, you can set the position PIDF values to:
+        // see FIRST GLOBAL Motor PIDF Tuning Guide (Updated 3 September 2019)
+
+        stdRightFront.setPositionPIDFCoefficients(5.0);
+        stdRightRear.setPositionPIDFCoefficients(5.0);
+        stdLeftFront.setPositionPIDFCoefficients(5.0);
+        stdLeftRear.setPositionPIDFCoefficients(5.0);
+        stdCarouselMotor.setPositionPIDFCoefficients(5.0);
+        stdArmMotor.setPositionPIDFCoefficients(5.0);
+    }
+
+    public void resetArmToRestPosition() {
+
     }
 
     /* Initialize standard Hardware interfaces */
@@ -206,5 +323,8 @@ public class StandardBot {
 
         setMotorsToBrakeOnZeroPower();
         setAllMotorsToZeroPower();
+
+
+
     }
 }
