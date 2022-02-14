@@ -46,6 +46,8 @@ public class DuoTeleOpMain extends LinearOpMode {
     private DistanceSensor distanceSensor = null;
     private Rev2mDistanceSensor revDistanceSensor = null;
 
+
+
     @Override
     public void runOpMode() {
 
@@ -74,13 +76,12 @@ public class DuoTeleOpMain extends LinearOpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting ArmMotor Encoder");    //
-        armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
+        //armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setTargetPositionTolerance(StandardBot.ARM_POSITION_TOLERANCE);
         armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
         armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
+        armMotor.setVelocity(.5 * StandardBot.ARM_MAX_VELOCITY);
+        //armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
 
         extenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
 
@@ -189,32 +190,41 @@ public class DuoTeleOpMain extends LinearOpMode {
             int newArmMotorTarget;
 
             // Controls the ARM
-
+            //double armPower = gamepad2.left_stick_y;
             // Allows gamepad2.left_stick to move the arm up to ARM_LEVEL4 max and down freely 
             if (gamepad2.left_stick_y > 0) // going DOWNWARD
             {
-                newArmMotorTarget = armMotor.getTargetPosition() - StandardBot.ARM_INCREMENT;
+                //newArmMotorTarget = armMotor.getTargetPosition() - StandardBot.ARM_INCREMENT;
 
-                if (newArmMotorTarget > StandardBot.ARM_LEVEL_REST) {
-                    armMotor.setTargetPosition(newArmMotorTarget);
-                } else {
-                    armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-                }
+                //if (newArmMotorTarget > StandardBot.ARM_LEVEL_REST) {
+                //    armMotor.setTargetPosition(newArmMotorTarget);
+                //}
+                //else {
+                //    armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
+                //}
 
-                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+
+                //armMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+                armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                armMotor.setVelocity(-gamepad2.left_stick_y * StandardBot.ARM_MAX_VELOCITY);
+                armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             } else if (gamepad2.left_stick_y < 0) // going UPWARD
             {
-                newArmMotorTarget = armMotor.getTargetPosition() + StandardBot.ARM_INCREMENT;
+                //newArmMotorTarget = armMotor.getTargetPosition() + StandardBot.ARM_INCREMENT;
 
-                if (newArmMotorTarget < StandardBot.ARM_LEVEL4) {
-                    armMotor.setTargetPosition(newArmMotorTarget);
-                } else {
-                    armMotor.setTargetPosition(StandardBot.ARM_LEVEL4);
-                }
+                //if (newArmMotorTarget < StandardBot.ARM_LEVEL4) {
+                //    armMotor.setTargetPosition(newArmMotorTarget);
+                //}
 
-                armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+//                else {
+                //    armMotor.setTargetPosition(StandardBot.ARM_LEVEL4);
+  //              }
+
+                //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+                armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                armMotor.setVelocity(-gamepad2.left_stick_y * StandardBot.ARM_MAX_VELOCITY);
+                armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             } else if (gamepad2.y)  // Raise ARM to LEVEL 3
             {
                 //armMotor.setTargetPosition(robot.ARM_LEVEL3);
@@ -223,9 +233,10 @@ public class DuoTeleOpMain extends LinearOpMode {
 
                 if (newArmMotorTarget < StandardBot.ARM_LEVEL3) {
                     armMotor.setTargetPosition(newArmMotorTarget);
-                } else {
-                    armMotor.setTargetPosition(StandardBot.ARM_LEVEL3);
                 }
+                //else {
+                //    armMotor.setTargetPosition(StandardBot.ARM_LEVEL3);
+                //}
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
@@ -235,9 +246,10 @@ public class DuoTeleOpMain extends LinearOpMode {
 
                 if (newArmMotorTarget < StandardBot.ARM_LEVEL2) {
                     armMotor.setTargetPosition(newArmMotorTarget);
-                } else {
-                    armMotor.setTargetPosition(StandardBot.ARM_LEVEL2);
                 }
+                //else {
+                //    armMotor.setTargetPosition(StandardBot.ARM_LEVEL2);
+                //}
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
@@ -249,9 +261,10 @@ public class DuoTeleOpMain extends LinearOpMode {
 
                 if (newArmMotorTarget < StandardBot.ARM_LEVEL1) {
                     armMotor.setTargetPosition(newArmMotorTarget);
-                } else {
-                    armMotor.setTargetPosition(StandardBot.ARM_LEVEL1);
                 }
+                //else {
+                //    armMotor.setTargetPosition(StandardBot.ARM_LEVEL1);
+                //}
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
                 armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
@@ -262,7 +275,12 @@ public class DuoTeleOpMain extends LinearOpMode {
             {
                 armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+            }
+            else {
+                armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                armMotor.setVelocity(0);
+                armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             }
 
 
