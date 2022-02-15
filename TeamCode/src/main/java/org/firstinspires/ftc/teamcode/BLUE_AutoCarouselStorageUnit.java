@@ -30,7 +30,7 @@ public class BLUE_AutoCarouselStorageUnit extends AutonomousBot {
 
         moveBackward(1.0, .3);
 
-        spinCarousel(DcMotorEx.Direction.FORWARD, StandardBot.OPTIMAL_CAROUSEL_POWER, 5000);
+        spinCarousel(DcMotorEx.Direction.FORWARD, 2.0, StandardBot.OPTIMAL_CAROUSEL_SPEED, 5000);
 
         rightStrafe(1.2);
 

@@ -112,7 +112,7 @@ public class RED_AutoDetectDuckBarcode extends AutonomousBot {
             // backup toward the carousel
             moveBackward(.39, 0.3);
 
-            spinCarousel(DcMotorEx.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
+            spinCarousel(DcMotorEx.Direction.REVERSE, 2.0, StandardBot.OPTIMAL_CAROUSEL_SPEED, 3000);
 
             moveForward(1);
             leftStrafe(.2);

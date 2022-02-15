@@ -262,16 +262,16 @@ public class DuoTeleOpMain extends LinearOpMode {
             // Controls the CAROUSEL SPINNER
             if (gamepad1.right_trigger > 0)  // Spin COUNTER-CLOCKWISE
             {
-                carouselMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                carouselMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
                 carouselMotor.setDirection(DcMotorEx.Direction.REVERSE);
-                carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
+                carouselMotor.setVelocity(StandardBot.OPTIMAL_CAROUSEL_SPEED);
             } else if (gamepad1.left_trigger > 0) // Spin CLOCKWISE
             {
-                carouselMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                carouselMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
-                carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
+                carouselMotor.setVelocity(StandardBot.OPTIMAL_CAROUSEL_SPEED);
             } else
-                carouselMotor.setPower(0.0);
+                carouselMotor.setVelocity(0.0);
 
             // Controls the INTAKE SPINNER
 

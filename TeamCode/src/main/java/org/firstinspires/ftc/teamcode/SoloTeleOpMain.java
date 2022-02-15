@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -80,6 +81,8 @@ public class SoloTeleOpMain extends LinearOpMode {
         armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
         armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
+
+        carouselMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         extenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
 
@@ -276,13 +279,13 @@ public class SoloTeleOpMain extends LinearOpMode {
             if (gamepad1.right_trigger > 0)  // Spin COUNTER-CLOCKWISE
             {
                 carouselMotor.setDirection(DcMotorEx.Direction.REVERSE);
-                carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
+                carouselMotor.setVelocity(StandardBot.OPTIMAL_CAROUSEL_SPEED);
             } else if (gamepad1.left_trigger > 0) // Spin CLOCKWISE
             {
                 carouselMotor.setDirection(DcMotorEx.Direction.FORWARD);
-                carouselMotor.setPower(StandardBot.OPTIMAL_CAROUSEL_POWER);
+                carouselMotor.setVelocity(StandardBot.OPTIMAL_CAROUSEL_SPEED);
             } else
-                carouselMotor.setPower(0.0);
+                carouselMotor.setVelocity(0.0);
 
             // Controls the INTAKE SPINNER
 

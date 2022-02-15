@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -12,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -118,9 +116,17 @@ public abstract class AutonomousBot extends LinearOpMode {
         moveForward(-nTiles, speed);
     }
 
-    public void spinCarousel(DcMotorEx.Direction direction, double power, int timeInMilliSeconds) {
+    public void spinCarousel(DcMotorEx.Direction direction, double revolutions, double speed, int timeInMilliSeconds) {
         robot.stdCarouselMotor.setDirection(direction);
-        robot.stdCarouselMotor.setPower(power);
+        robot.stdCarouselMotor.setTargetPosition((int)Math.round(revolutions * StandardBot.ONE_CAROUSEL_TURN_IN_INCHES * StandardBot.TICKS_PER_INCH));
+        robot.stdCarouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.stdCarouselMotor.setVelocity(speed);
+
+        while (robot.stdCarouselMotor.isBusy()) {
+            telemetry.addData("spinCarousel", "Current wheel position %7d", robot.stdCarouselMotor.getCurrentPosition());
+            telemetry.addData("spinCarousel", "Target wheel position %7d", robot.stdCarouselMotor.getTargetPosition());
+            telemetry.update();
+        }
         sleep(timeInMilliSeconds);
     }
 
@@ -228,8 +234,8 @@ public abstract class AutonomousBot extends LinearOpMode {
             robot.resetDriveTrainEncoder();
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
-            newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.COUNTS_PER_INCH);
+            newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.TICKS_PER_INCH);
+            newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.TICKS_PER_INCH);
 
             telemetry.addData("encoderDrive", "newLeftTarget = %7d", newLeftTarget);
             robot.stdLeftFront.setTargetPosition(newLeftTarget);
@@ -287,8 +293,8 @@ public abstract class AutonomousBot extends LinearOpMode {
             robot.resetDriveTrainEncoder();
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
-            newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.COUNTS_PER_INCH);
+            newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.TICKS_PER_INCH);
+            newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.TICKS_PER_INCH);
 
             robot.stdLeftFront.setTargetPosition(-newLeftTarget);
             robot.stdLeftRear.setTargetPosition(newLeftTarget);

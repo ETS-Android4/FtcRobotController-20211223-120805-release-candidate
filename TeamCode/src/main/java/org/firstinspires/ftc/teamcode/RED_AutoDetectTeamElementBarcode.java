@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name = "RED_AutoDetectTeamElementBarcode")
 
 public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
 
-    private final int DEBUG_SLEEP_TIME = 5000;
+    private final int DEBUG_SLEEP_TIME = 1000;
     @Override
     public void runOpMode() {
 
@@ -20,6 +21,9 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
         initTfod();
         robot.stdTurretServo.setPosition(StandardBot.TURRET_MIDDLE_POSITION);
         robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
+        setDefaultMotorDirections();
+
+
 
         /*
          * Activate TensorFlow Object Detection before we wait for the start command.
@@ -47,6 +51,8 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
+
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -54,7 +60,7 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
             teamElementBarcodeLevel = getTargetLevelFromBarcode("RED");
 
             telemetry.addData("Moving", "rightStrafe 1.1 tiles");
-            rightStrafe(1.1);
+            rightStrafe(1.5);
 
             try {
                 if (teamElementBarcodeLevel == 1) {
@@ -85,28 +91,25 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
 
                 sleep(DEBUG_SLEEP_TIME);
 
-                telemetry.addData("Status", "leftStrafe 2.35 tiles");
-                // strafe left toward the storage unit wall
-                leftStrafe(2.35);
-                telemetry.update();
-
-                sleep(DEBUG_SLEEP_TIME);
-
                 telemetry.addData("Status", "return arm to rest position");
                 returnArmPosition();
 
-                telemetry.update();
+                sleep(DEBUG_SLEEP_TIME);
+
+                telemetry.addData("Status", "leftStrafe 2.35 tiles");
+                // strafe left toward the storage unit wall
+                leftStrafe(2.35);
 
                 sleep(DEBUG_SLEEP_TIME);
                 // backup toward the carousel
 
-                telemetry.addData("Status", "moveBackward .39 tile");
-                moveBackward(.39, 0.3);
+                telemetry.addData("Status", "moveBackward .75 tile");
+                moveBackward(.75);
 
                 sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Status", "spin carousel in reverse");
-                spinCarousel(DcMotorEx.Direction.REVERSE, StandardBot.OPTIMAL_CAROUSEL_POWER, 3000);
+                spinCarousel(DcMotorEx.Direction.REVERSE, 2.00, StandardBot.OPTIMAL_CAROUSEL_SPEED, 3000);
 
                 telemetry.addData("Status", "moveForward 1 tile");
                 moveForward(1);
