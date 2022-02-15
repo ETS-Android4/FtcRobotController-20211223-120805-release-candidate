@@ -257,8 +257,6 @@ public class DuoTeleOpMain extends LinearOpMode {
             // Raise ARM to LEVEL 1
             else if (gamepad2.a) // && turretServo.getPosition() == robot.TURRET_MIDDLE_POSITION)             
             {
-                newArmMotorTarget = armMotor.getTargetPosition() + StandardBot.ARM_INCREMENT;
-
                 if (newArmMotorTarget < StandardBot.ARM_LEVEL1) {
                     armMotor.setTargetPosition(newArmMotorTarget);
                 }
@@ -267,15 +265,16 @@ public class DuoTeleOpMain extends LinearOpMode {
                 //}
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
 
             }
             // Drop ARM to GROUND LEVEL
             else if (gamepad2.x)// && turretServo.getPosition() == robot.TURRET_MIDDLE_POSITION) 
             {
+
                 armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
             }
             else {
                 armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
