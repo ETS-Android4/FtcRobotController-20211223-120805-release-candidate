@@ -29,7 +29,7 @@ public class MaxVelocityTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        motor = hardwareMap.get(DcMotorEx.class, "ArmMotor");
+        motor = hardwareMap.get(DcMotorEx.class, "RightRear");
         extenderServo = hardwareMap.get(Servo.class, "ExtenderServo");
         motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AutonomousBot extends LinearOpMode {
+public abstract class AutonomousBot extends LinearOpMode {
     public final static String detectionObjectLabel = "EagleTwo";
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
      * the following 4 detectable objects
@@ -126,65 +126,73 @@ public class AutonomousBot extends LinearOpMode {
 
     public void liftArm(int position) {
 
+        telemetry.addData("liftArm", "Setting ExtenderServo to MAX_POSITION");
         robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
-        telemetry.addData("DEBUG", "Inside liftArm(int position) now");
 
+        telemetry.addData("liftArm", "Setting to Stop and Reset Encoder");
         robot.stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("DEBUG", "Stop and Reset Encoder");
 
+        telemetry.addData("liftArm", "Setting TargetPosition to %5d", position);
         robot.stdArmMotor.setTargetPosition(position);
-        telemetry.addData("DEBUG", "Set Target Position to %5d", position);
 
+        telemetry.addData("liftArm", "Setting Run to Position");
         robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-        telemetry.addData("DEBUG", "Run to Position");
 
-        robot.stdArmMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
-        telemetry.addData("DEBUG", "Set Arm Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY );
+        telemetry.addData("liftArm", "Setting Arm Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY );
+        robot.stdArmMotor.setVelocity(StandardBot.OPTIMAL_ARM_SPEED);
 
-        while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > StandardBot.ARM_POSITION_TOLERANCE)
+        while (robot.stdArmMotor.isBusy())
         {
-          
-          telemetry.addData("Motors", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
-          telemetry.addData("Motors", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
-          //telemetry.addData("Motors", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
+          telemetry.addData("liftArm", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
+          telemetry.addData("liftArm", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
+          telemetry.addData("liftArm", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
           telemetry.update();
         
         }
 
-        telemetry.addData("DEBUG", "robot.stdArmMotor.setVelocity(0.0)");
+        telemetry.addData("liftArm", "Setting velocity to 0.0 now");
         robot.stdArmMotor.setVelocity(0.0);
 
+        telemetry.addData("liftArm", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
+        telemetry.addData("liftArm", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
+        telemetry.addData("liftArm", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
         telemetry.update();
-
     }
 
     public void returnArmPosition() {
 
+        telemetry.addData("returnArmPosition", "Setting ExtenderServo to MAX_POSITION");
+        robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
+
         int position = robot.stdArmMotor.getCurrentPosition();
+        telemetry.addData("returnArmPosition", "Arm Current Position is %5d", position);
 
-        telemetry.addData("DEBUG", "Inside returnArmPosition() now");
-
+        telemetry.addData("returnArmPosition", "Setting TargetPosition to %5d", StandardBot.ARM_LEVEL_REST);
         robot.stdArmMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-        telemetry.addData("DEBUG", "Set Target Position to %5d", StandardBot.ARM_LEVEL_REST);
-        robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-        telemetry.addData("DEBUG", "Run to Position");
-        robot.stdArmMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
-        telemetry.addData("DEBUG", "Set Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY);
 
-        while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > StandardBot.ARM_POSITION_TOLERANCE)
+        telemetry.addData("returnArmPosition", "Setting Run to Position");
+        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+        telemetry.addData("returnArmPosition", "Set Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY);
+        robot.stdArmMotor.setVelocity(StandardBot.OPTIMAL_ARM_SPEED);
+
+        while (robot.stdArmMotor.isBusy())
         {
-
-            telemetry.addData("Motors", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
-            telemetry.addData("Motors", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
-            telemetry.addData("Motors", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("returnArmPosition", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
+            telemetry.addData("returnArmPosition", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
+            telemetry.addData("returnArmPosition", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.update();
 
         }
 
-        telemetry.addData("DEBUG", "robot.stdArmMotor.setVelocity(0.0)");
+        telemetry.addData("returnArmPosition", "Setting velocity to 0.0 now");
         robot.stdArmMotor.setVelocity(0.0);
+
+        telemetry.addData("returnArmPosition", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
+        telemetry.addData("returnArmPosition", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
+        telemetry.addData("returnArmPosition", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
+
         telemetry.update();
-        sleep(5000);
     }
 
     public void leftStrafe(double nAmounts) {
@@ -211,24 +219,34 @@ public class AutonomousBot extends LinearOpMode {
         int newLeftTarget;
         int newRightTarget;
 
+        telemetry.addData("encoderDrive", "Inside econderDrive(...)");
+
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
+            telemetry.addData("encoderDrive", "Resetting Drive Train Encoder");
             robot.resetDriveTrainEncoder();
 
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
             newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.COUNTS_PER_INCH);
 
+            telemetry.addData("encoderDrive", "newLeftTarget = %7d", newLeftTarget);
             robot.stdLeftFront.setTargetPosition(newLeftTarget);
             robot.stdLeftRear.setTargetPosition(newLeftTarget);
+
+            telemetry.addData("encoderDrive", "newRightTarget = %7d", newRightTarget);
             robot.stdRightFront.setTargetPosition(newRightTarget);
             robot.stdRightRear.setTargetPosition(newRightTarget);
 
-            // Turn On RUN_TO_POSITION
+            telemetry.addData("encoderDrive", "Setting DriveTrain to RUN_TO_POSITION");
             robot.setDriveTrainToRunToPosition();
 
+            telemetry.addData("encoderDrive", "Setting DriveTrainVelocity to %7.2f", speed);
             robot.setDriveTrainVelocity(speed);
+
+            telemetry.update();
+
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -240,8 +258,7 @@ public class AutonomousBot extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeOut) &&
-                    (robot.stdLeftFront.isBusy() && robot.stdLeftRear.isBusy() &&
-                            robot.stdRightFront.isBusy() && robot.stdRightRear.isBusy())) {
+                    robot.isDriveTrainBusy()) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
@@ -266,16 +283,17 @@ public class AutonomousBot extends LinearOpMode {
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
-            robot.setDefaultMotorDirections();
+            telemetry.addData("encoderDrive", "Resetting Drive Train Encoder");
+            robot.resetDriveTrainEncoder();
 
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
             newRightTarget = robot.stdRightFront.getCurrentPosition() + (int) (rightInches * StandardBot.COUNTS_PER_INCH);
 
-            robot.stdLeftFront.setTargetPosition(newLeftTarget);
-            robot.stdLeftRear.setTargetPosition(-newLeftTarget);
-            robot.stdRightFront.setTargetPosition(-newRightTarget);
-            robot.stdRightRear.setTargetPosition(newRightTarget);
+            robot.stdLeftFront.setTargetPosition(-newLeftTarget);
+            robot.stdLeftRear.setTargetPosition(newLeftTarget);
+            robot.stdRightFront.setTargetPosition(newRightTarget);
+            robot.stdRightRear.setTargetPosition(-newRightTarget);
 
             // Turn On RUN_TO_POSITION
             robot.setDriveTrainToRunToPosition();
@@ -466,11 +484,7 @@ public class AutonomousBot extends LinearOpMode {
         telemetry.update();
 
         robot.resetDriveTrainEncoder();
-
-        robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        robot.stdRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        robot.stdRightRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        robot.setDriveTrainToRunUsingEncoder();
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Motors", "Current Position at %7d :%7d %7d :%7d",

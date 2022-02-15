@@ -4,7 +4,6 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -202,7 +201,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                 }
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_SPEED);
             } else if (gamepad1.right_stick_y < 0) // going UPWARD
             {
                 newArmMotorTarget = armMotor.getTargetPosition() + StandardBot.ARM_INCREMENT;
@@ -214,7 +213,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                 }
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_SPEED);
             }
             else if (gamepad1.y)  // Raise ARM to LEVEL 3
             {
@@ -229,7 +228,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                 }
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_SPEED);
             }
             else if (gamepad1.b) // Raise ARM to LEVEL 2
             {
@@ -242,7 +241,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                 }
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_SPEED);
             }
             // Raise ARM to LEVEL 1
             else if (gamepad1.a) // && turretServo.getPosition() == robot.TURRET_MIDDLE_POSITION)
@@ -256,7 +255,7 @@ public class SoloTeleOpMain extends LinearOpMode {
                 }
 
                 armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
-                armMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
+                armMotor.setPower(StandardBot.OPTIMAL_ARM_SPEED);
 
             }
             // Drop ARM to GROUND LEVEL

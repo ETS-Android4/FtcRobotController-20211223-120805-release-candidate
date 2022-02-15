@@ -78,9 +78,9 @@ public class DuoTeleOpMain extends LinearOpMode {
         telemetry.addData("Status", "Resetting ArmMotor Encoder");    //
         //armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setTargetPositionTolerance(StandardBot.ARM_POSITION_TOLERANCE);
-        armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
-        armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        armMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
+        //armMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
+        //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        //armMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
         //armMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
 
         extenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
