@@ -11,11 +11,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-@Autonomous(name = "AutonomousBot")
 
 public class AutonomousBot extends LinearOpMode {
     public final static String detectionObjectLabel = "EagleTwo";
@@ -94,14 +94,6 @@ public class AutonomousBot extends LinearOpMode {
 
     }
 
-    public void setAllMotorPower(double power) {
-        robot.stdLeftFront.setPower(power);
-        robot.stdLeftRear.setPower(power);
-        robot.stdRightFront.setPower(power);
-        robot.stdRightRear.setPower(power);
-    }
-
-
     public void turnRight() {
         encoderDrive(StandardBot.OPTIMAL_TURN_SPEED, StandardBot.TILE_SIZE - 8, -(StandardBot.TILE_SIZE - 8), 5.0);
     }
@@ -136,20 +128,18 @@ public class AutonomousBot extends LinearOpMode {
 
         robot.stdExtenderServo.setPosition(StandardBot.EXTENDER_MAX_POSITION);
         telemetry.addData("DEBUG", "Inside liftArm(int position) now");
+
         robot.stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("DEBUG", "Stop and Reset Encoder");
-        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("DEBUG", "Run Using Encoder");
 
-        //int newArmPos = robot.stdArmMotor.getCurrentPosition() + position;
         robot.stdArmMotor.setTargetPosition(position);
-
         telemetry.addData("DEBUG", "Set Target Position to %5d", position);
+
         robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
         telemetry.addData("DEBUG", "Run to Position");
-        robot.stdArmMotor.setPower(StandardBot.OPTIMAL_ARM_POWER);
-        telemetry.addData("DEBUG", "Set Power to %7.2f", StandardBot.OPTIMAL_ARM_POWER );
 
+        robot.stdArmMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
+        telemetry.addData("DEBUG", "Set Arm Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY );
 
         while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > StandardBot.ARM_POSITION_TOLERANCE)
         {
@@ -160,16 +150,9 @@ public class AutonomousBot extends LinearOpMode {
           telemetry.update();
         
         }
-        telemetry.addData("DEBUG", "calling robot.setMotorsToBreakOnZeroPower()");
-        robot.setMotorsToBrakeOnZeroPower();
 
-        telemetry.addData("DEBUG", "robot.stdArmMotor.setPower(0.0)");
-        robot.stdArmMotor.setPower(0.0);
-
-        telemetry.addData("DEBUG", "Set Mode Run Using Encoder");
-        robot.stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("DEBUG", "Set Stop and Reset Encoder");
-        robot.stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("DEBUG", "robot.stdArmMotor.setVelocity(0.0)");
+        robot.stdArmMotor.setVelocity(0.0);
 
         telemetry.update();
 
@@ -177,19 +160,29 @@ public class AutonomousBot extends LinearOpMode {
 
     public void returnArmPosition() {
 
+        int position = robot.stdArmMotor.getCurrentPosition();
+
         telemetry.addData("DEBUG", "Inside returnArmPosition() now");
-        robot.stdArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("DEBUG", "Stop and Reset Encoder");
-        robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("DEBUG", "Run Using Encoder");
+
         robot.stdArmMotor.setTargetPosition(StandardBot.ARM_LEVEL_REST);
         telemetry.addData("DEBUG", "Set Target Position to %5d", StandardBot.ARM_LEVEL_REST);
         robot.stdArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
         telemetry.addData("DEBUG", "Run to Position");
-        robot.stdArmMotor.setPower(StandardBot.OPTIMAL_REST_POWER);
-        telemetry.addData("DEBUG", "Set Power to %7.2f", StandardBot.OPTIMAL_REST_POWER);
-        robot.stdArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("DEBUG", "Stop and Reset Encoder");
+        robot.stdArmMotor.setVelocity(StandardBot.ARM_MAX_VELOCITY);
+        telemetry.addData("DEBUG", "Set Velocity to %7.2f", StandardBot.ARM_MAX_VELOCITY);
+
+        while (opModeIsActive() && Math.abs(robot.stdArmMotor.getCurrentPosition() - position) > StandardBot.ARM_POSITION_TOLERANCE)
+        {
+
+            telemetry.addData("Motors", "ArmMotor targetPosition is %7d", robot.stdArmMotor.getTargetPosition());
+            telemetry.addData("Motors", "ArmMotor currentPosition is %7d", robot.stdArmMotor.getCurrentPosition());
+            telemetry.addData("Motors", "ArmMotor CURRENT is %5.2f milli-amps", robot.stdArmMotor.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.update();
+
+        }
+
+        telemetry.addData("DEBUG", "robot.stdArmMotor.setVelocity(0.0)");
+        robot.stdArmMotor.setVelocity(0.0);
         telemetry.update();
         sleep(5000);
     }
@@ -218,13 +211,10 @@ public class AutonomousBot extends LinearOpMode {
         int newLeftTarget;
         int newRightTarget;
 
-        //setDefaultMotorDirections();
-        robot.resetMotorEncoders();
-        robot.setMotorsToRunUsingEncoder();
-
-
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
+
+            robot.resetDriveTrainEncoder();
 
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
@@ -236,16 +226,9 @@ public class AutonomousBot extends LinearOpMode {
             robot.stdRightRear.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdRightFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdRightRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            robot.setDriveTrainToRunToPosition();
 
-
-            robot.stdLeftFront.setPower(Math.abs(speed));
-            robot.stdLeftRear.setPower(Math.abs(speed));
-            robot.stdRightFront.setPower(Math.abs(speed));
-            robot.stdRightRear.setPower(Math.abs(speed));
+            robot.setDriveTrainVelocity(speed);
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -271,15 +254,8 @@ public class AutonomousBot extends LinearOpMode {
             }
 
             // Stop all motion;
-            robot.stdLeftFront.setPower(0);
-            robot.stdLeftRear.setPower(0);
-            robot.stdRightFront.setPower(0);
-            robot.stdRightRear.setPower(0);
+            robot.setDriveTrainVelocity(0.0);
 
-            // Turn off RUN_TO_POSITION
-            robot.setMotorsToRunUsingEncoder();
-
-            sleep(250);   // optional pause after each move
         }
     }
 
@@ -291,7 +267,6 @@ public class AutonomousBot extends LinearOpMode {
         if (opModeIsActive()) {
 
             robot.setDefaultMotorDirections();
-            robot.resetMotorEncoders();
 
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.stdLeftFront.getCurrentPosition() + (int) (leftInches * StandardBot.COUNTS_PER_INCH);
@@ -303,18 +278,12 @@ public class AutonomousBot extends LinearOpMode {
             robot.stdRightRear.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdRightFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            robot.stdRightRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            robot.setDriveTrainToRunToPosition();
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.stdLeftFront.setPower(Math.abs(speed));
-            robot.stdLeftRear.setPower(Math.abs(speed));
-            robot.stdRightFront.setPower(Math.abs(speed));
-            robot.stdRightRear.setPower(Math.abs(speed));
 
+            robot.setDriveTrainVelocity(speed);
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -335,21 +304,8 @@ public class AutonomousBot extends LinearOpMode {
                         robot.stdRightRear.getCurrentPosition());
                 telemetry.update();
             }
-
             // Stop all motion;
-            robot.stdLeftFront.setPower(0);
-            robot.stdLeftRear.setPower(0);
-            robot.stdRightFront.setPower(0);
-            robot.stdRightRear.setPower(0);
-
-
-            // Turn off RUN_TO_POSITION
-            robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            robot.stdRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            robot.stdRightRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-            sleep(250);   // optional pause after each move
+            robot.setDriveTrainVelocity(0.0);
         }
     }
 
@@ -509,10 +465,7 @@ public class AutonomousBot extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        robot.stdLeftFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        robot.stdLeftRear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        robot.stdRightFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        robot.stdRightRear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetDriveTrainEncoder();
 
         robot.stdLeftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         robot.stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);

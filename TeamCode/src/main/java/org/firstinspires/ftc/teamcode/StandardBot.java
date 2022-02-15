@@ -67,16 +67,16 @@ public class StandardBot {
     // ARM LEVEL 4 is for capping the Team Shipping Element
     static final int ARM_LEVEL4 = (int) Math.round(0.40 * ARM_WORM_COUNTS_PER_REV);
 
-    static final int ARM_LEVEL3 = (int)Math.round(0.23 * ARM_WORM_COUNTS_PER_REV);
+    static final int ARM_LEVEL3 = 3075; //(int)Math.round(0.23 * ARM_WORM_COUNTS_PER_REV);
 
     // level 3 = 796
-    static final int ARM_LEVEL2 = (int)Math.round(0.160 * ARM_WORM_COUNTS_PER_REV);
+    static final int ARM_LEVEL2 = 2103; //(int)Math.round(0.160 * ARM_WORM_COUNTS_PER_REV);
     // level 2 = 579
-    static final int ARM_LEVEL1 = (int)Math.round(0.090 * ARM_WORM_COUNTS_PER_REV);
+    static final int ARM_LEVEL1 = 1187; //(int)Math.round(0.090 * ARM_WORM_COUNTS_PER_REV);
     // level 1 = 288
     static final int ARM_LEVEL_REST = 0;
     static final int ARM_INCREMENT = (int) Math.round(0.005 * ARM_WORM_COUNTS_PER_REV);
-    static final int ARM_POSITION_TOLERANCE = 5; // tolerate errors to within n ticks
+    static final int ARM_POSITION_TOLERANCE = 20; // tolerate errors to within n ticks
 
     static final double EXTENDER_MIN_POSITION = 0.00;
     static final double EXTENDER_MAX_POSITION = 1.00;
@@ -141,11 +141,10 @@ public class StandardBot {
         stdLeftRear.setDirection(DcMotorEx.Direction.REVERSE);
         stdRightFront.setDirection(DcMotorEx.Direction.FORWARD);
         stdRightRear.setDirection(DcMotorEx.Direction.FORWARD);
-
         stdArmMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public void setMotorsToRunWithoutEncoder() {
+    public void setDriveTrainToRunWithoutEncoder() {
         if (hwMap == null) { // escape this function if the robot has not mapped to any motors
             return;
         }
@@ -154,11 +153,9 @@ public class StandardBot {
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         stdRightRear.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        stdCarouselMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        stdArmMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void resetMotorEncoders() {
+    public void resetDriveTrainEncoder() {
         if (hwMap == null) { // escape this function if the robot has not mapped to any motors
             return;
         }
@@ -168,11 +165,11 @@ public class StandardBot {
         stdRightFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         stdRightRear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         //stdCarouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //stdArmMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
-    public void setMotorsToRunUsingEncoder() {
+    public void setDriveTrainToRunUsingEncoder() {
         if (hwMap == null) { // escape this function if the robot has not mapped to any motors
             return;
         }
@@ -180,10 +177,9 @@ public class StandardBot {
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         stdRightRear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        stdArmMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
-    public void setMotorsToBrakeOnZeroPower() {
+    public void setDriveTrainToBrakeOnZeroPower() {
         if (hwMap == null) { // escape this function if the robot has not mapped to any motors
             return;
         }
@@ -191,9 +187,6 @@ public class StandardBot {
         stdLeftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         stdRightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         stdRightRear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        stdCarouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        stdArmMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     public void setAllMotorsToZeroPower() {
@@ -209,7 +202,7 @@ public class StandardBot {
         stdArmMotor.setPower(0);
     }
 
-    public void setModeAllRTP() {
+    public void setDriveTrainToRunToPosition() {
         if (hwMap == null) { // escape this function if the robot has not mapped to any motors
             return;
         }
@@ -217,6 +210,20 @@ public class StandardBot {
         stdLeftRear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         stdRightFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         stdLeftFront.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    }
+
+    public void setDriveTrainTargetPosition(int position) {
+        stdLeftFront.setTargetPosition(position);
+        stdLeftRear.setTargetPosition(position);
+        stdRightFront.setTargetPosition(position);
+        stdRightRear.setTargetPosition(position);
+    }
+
+    public void setDriveTrainVelocity(double velocity){
+        stdLeftFront.setVelocity(velocity);
+        stdLeftRear.setVelocity(velocity);
+        stdRightFront.setVelocity(velocity);
+        stdRightRear.setVelocity(velocity);
     }
 
     public void setCustomPIDFCoefficients(){
@@ -317,14 +324,14 @@ public class StandardBot {
         stdDistanceSensor = hwMap.get(DistanceSensor.class, "DistanceSensor");
         stdRevDistanceSensor = (Rev2mDistanceSensor) stdDistanceSensor;
 
-        resetMotorEncoders();
-        setMotorsToRunWithoutEncoder();
+        resetDriveTrainEncoder();
+        setDriveTrainToRunWithoutEncoder();
         setDefaultMotorDirections();
 
-        setMotorsToBrakeOnZeroPower();
+        setDriveTrainToBrakeOnZeroPower();
         setAllMotorsToZeroPower();
 
-
-
+        stdArmMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        stdCarouselMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 }
