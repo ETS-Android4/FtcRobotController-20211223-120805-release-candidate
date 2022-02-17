@@ -18,7 +18,7 @@ public class RED_AutoDetectTeamElementRight extends AutonomousBot {
         initVuforia();
         initTfod();
         robot.stdTurretServo.setPosition(StandardBot.TURRET_MIDDLE_POSITION);
-
+        setDefaultMotorDirections();
         /*
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.

@@ -121,10 +121,10 @@ public class DuoTeleOpMain extends LinearOpMode {
             strafe = gamepad1.left_stick_x;
             rotate = gamepad1.right_stick_x;
 
-            leftFrontSpeed = (StandardBot.MAX_DRIVE_TRAIN_VELOCITY) * (drive - strafe - rotate);
-            leftRearSpeed = (StandardBot.MAX_DRIVE_TRAIN_VELOCITY) * (drive + strafe - rotate);
-            rightFrontSpeed = (StandardBot.MAX_DRIVE_TRAIN_VELOCITY) * (drive + strafe + rotate);
-            rightRearSpeed = (StandardBot.MAX_DRIVE_TRAIN_VELOCITY) * (drive - strafe + rotate);
+            leftFrontSpeed = (StandardBot.OPTIMAL_DRIVE_SPEED) * (drive - strafe - rotate);
+            leftRearSpeed = (StandardBot.OPTIMAL_DRIVE_SPEED) * (drive + strafe - rotate);
+            rightFrontSpeed = (StandardBot.OPTIMAL_DRIVE_SPEED) * (drive + strafe + rotate);
+            rightRearSpeed = (StandardBot.OPTIMAL_DRIVE_SPEED) * (drive - strafe + rotate);
 
             // Send calculated power to wheels
             leftFront.setVelocity(leftFrontSpeed);

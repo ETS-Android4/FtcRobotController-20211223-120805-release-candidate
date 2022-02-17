@@ -51,8 +51,6 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -76,37 +74,22 @@ public class RED_AutoDetectTeamElementBarcode extends AutonomousBot {
 
 
                 telemetry.addData("Arm", "at position %5d", robot.stdArmMotor.getCurrentPosition());
-                telemetry.update();
-                sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Moving", "forward 0.6 tile");
                 moveForward(0.6);
-                telemetry.update();
-
-                sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Status", "regurgitating game element");
                 regurgitateGameElement(0.3, 3000);
-                telemetry.update();
-
-                sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Status", "return arm to rest position");
                 returnArmPosition();
-
-                sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Status", "leftStrafe 2.35 tiles");
                 // strafe left toward the storage unit wall
                 leftStrafe(2.35);
 
-                sleep(DEBUG_SLEEP_TIME);
-                // backup toward the carousel
-
                 telemetry.addData("Status", "moveBackward .75 tile");
                 moveBackward(.75);
-
-                sleep(DEBUG_SLEEP_TIME);
 
                 telemetry.addData("Status", "spin carousel in reverse");
                 spinCarousel(DcMotorEx.Direction.REVERSE, 2.00, StandardBot.OPTIMAL_CAROUSEL_SPEED, 3000);

@@ -80,7 +80,7 @@ public class StandardBot {
     static final double MAGNET_START_POSITION = 0.00;
     static final double MAGNET_END_POSITION = 1.00;
 
-    static final double OPTIMAL_DRIVE_SPEED = 0.70 * StandardBot.MAX_DRIVE_TRAIN_VELOCITY;
+    static final double OPTIMAL_DRIVE_SPEED = 0.50 * StandardBot.MAX_DRIVE_TRAIN_VELOCITY;
     static final double OPTIMAL_TURN_SPEED = 0.3 * StandardBot.MAX_DRIVE_TRAIN_VELOCITY;
     static final double OPTIMAL_STRAFE_SPEED = 0.50 * StandardBot.MAX_DRIVE_TRAIN_VELOCITY;
 
